@@ -18,7 +18,7 @@ void showErrorMessage(BuildContext context, String errorMessage) {
 }
 
 Future<void> initializeWithDelay() async {
-  await Future.delayed(Duration(seconds: 3)); // fake delay
+  // await Future.delayed(Duration(seconds: 3)); // fake delay
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 

@@ -129,10 +129,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _initializeWithDelay() async {
-    // await Future.delayed(Duration(seconds: 3)); // fake delay
+    await Future.delayed(Duration(seconds: 3)); // fake delay
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    final user = FirebaseAuth.instance.currentUser;
+    print('if user if that active before login screen $user');
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/email_verification.dart';
+import 'package:flutter_tutorial_first_sample_project/login.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,20 +18,24 @@ class HomePage extends StatelessWidget {
             case ConnectionState.done:
               final user = FirebaseAuth.instance.currentUser;
               print('now have a user that is $user');
-              if (user?.emailVerified ?? false) {
-                return Column(
-                  children: [
-                    Text('Welcome to homepage'),
-                    ElevatedButton(
-                      onPressed: () {
-                        userLogout(context);
-                      },
-                      child: Text('Logout'),
-                    ),
-                  ],
-                );
+              if (user != null) {
+                if (user.emailVerified) {
+                  return Column(
+                    children: [
+                      Text('Welcome to homepage'),
+                      ElevatedButton(
+                        onPressed: () {
+                          userLogout(context);
+                        },
+                        child: Text('Logout'),
+                      ),
+                    ],
+                  );
+                } else {
+                  return EmailVerification();
+                }
               } else {
-                return EmailVerification();
+                return LoginScreen();
               }
             default:
               return Text('Loading please wait');
