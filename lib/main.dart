@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen/login_form.dart';
+import 'package:flutter_tutorial_first_sample_project/form.dart';
 import 'package:flutter_tutorial_first_sample_project/home.dart';
 import 'package:flutter_tutorial_first_sample_project/login.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen/custom_background.dart';
+import 'package:flutter_tutorial_first_sample_project/my_notes.dart';
 import 'package:flutter_tutorial_first_sample_project/register.dart';
+import 'package:flutter_tutorial_first_sample_project/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +28,12 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      home: const LoginScreen(),
+      home: HomePage(),
       routes: {
-        '/login/': (ctx) => LoginScreen(),
-        '/register/': (ctx) => RegisterScreen(),
+        homeRoute: (ctx) => HomePage(),
+        notesRoute: (ctx) => MyNotes(),
+        loginRoute: (ctx) => LoginScreen(),
+        registerRoute: (ctx) => RegisterScreen(),
       },
     );
   }

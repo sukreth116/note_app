@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_tutorial_first_sample_project/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 import 'firebase_options.dart';
 
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/login/',
+                            loginRoute,
                             (route) => false,
                           );
                         },
@@ -106,6 +107,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
       );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(homeRoute, (route) => false);
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'weak-password') {

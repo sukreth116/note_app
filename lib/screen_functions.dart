@@ -24,12 +24,5 @@ Future<void> initializeWithDelay() async {
 
 Future<void> userLogout(BuildContext context) async {
   await FirebaseAuth.instance.signOut();
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(
-      builder: (ctx) {
-        return LoginScreen();
-      },
-    ),
-    (Route<dynamic> route) => false,
-  );
+  Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/login.dart';
+import 'package:flutter_tutorial_first_sample_project/my_notes.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,7 +11,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('HOME PAGE')),
       body: FutureBuilder(
         future: initializeWithDelay(),
         builder: (context, snapshot) {
@@ -20,23 +20,15 @@ class HomePage extends StatelessWidget {
               print('now have a user that is $user');
               if (user != null) {
                 if (user.emailVerified) {
-                  return Column(
-                    children: [
-                      Text('Welcome to homepage'),
-                      ElevatedButton(
-                        onPressed: () {
-                          userLogout(context);
-                        },
-                        child: Text('Logout'),
-                      ),
-                    ],
-                  );
+                  return MyNotes();
+                  // print('email verified');
                 } else {
                   return EmailVerification();
                 }
               } else {
                 return LoginScreen();
               }
+            // return Text('Done home reached');
             default:
               return Text('Loading please wait');
           }

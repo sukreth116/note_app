@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tutorial_first_sample_project/home.dart';
+import 'package:flutter_tutorial_first_sample_project/routes.dart';
 import 'firebase_options.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/register/',
+                            registerRoute,
                             (route) => false,
                           );
                         },
@@ -107,13 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         final userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) {
-              return HomePage();
-            },
-          ),
-        );
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(homeRoute, (route) => false);
         // print('User Credentials: $userCredential');
       } on FirebaseAuthException catch (e) {
         // print(e.code);
@@ -129,12 +126,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _initializeWithDelay() async {
-    await Future.delayed(Duration(seconds: 3)); // fake delay
+    // await Future.delayed(Duration(seconds: 3)); // fake delay
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     final user = FirebaseAuth.instance.currentUser;
-    print('if user if that active before login screen $user');
+    print('print user if, active before login screen $user');
   }
 
   @override
