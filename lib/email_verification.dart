@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 
 class EmailVerification extends StatefulWidget {
@@ -16,20 +17,26 @@ class _EmailVerificationState extends State<EmailVerification> {
       appBar: AppBar(title: Text('Email verification screen')),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('You have to verify email here'),
+            Text(
+              "We've send an email verfication link to mail. Please check it",
+            ),
+            Text("Didn't receive the mail press the button bellow"),
             TextButton(
               onPressed: () async {
                 final user = FirebaseAuth.instance.currentUser;
                 await user?.sendEmailVerification();
               },
-              child: Text('Send verification mail'),
+              child: Text('Send verification link'),
             ),
             ElevatedButton(
               onPressed: () {
-                userLogout(context);
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
-              child: Text('Logout'),
+              child: Text('Logout and Restart'),
             ),
           ],
         ),

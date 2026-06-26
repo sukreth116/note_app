@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/firebase_options.dart';
 import 'package:flutter_tutorial_first_sample_project/login.dart';
 
-void showErrorMessage(BuildContext context, String errorMessage) {
+Future<void> showErrorMessage(BuildContext context, String errorMessage) async {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       elevation: 6,
@@ -14,6 +14,29 @@ void showErrorMessage(BuildContext context, String errorMessage) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       // padding: EdgeInsets.all(10),
     ),
+  );
+}
+
+Future<void> showErrorDialogBox(
+  BuildContext context,
+  String errorMessage,
+) async {
+  showDialog(
+    context: context,
+    builder: (ctx) {
+      return AlertDialog(
+        title: Text('An Error Occured!'),
+        content: Text(errorMessage),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('Ok'),
+          ),
+        ],
+      );
+    },
   );
 }
 

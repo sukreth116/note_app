@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/auth_screen/login_form.dart';
+import 'package:flutter_tutorial_first_sample_project/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/form.dart';
 import 'package:flutter_tutorial_first_sample_project/home.dart';
 import 'package:flutter_tutorial_first_sample_project/login.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         notesRoute: (ctx) => MyNotes(),
         loginRoute: (ctx) => LoginScreen(),
         registerRoute: (ctx) => RegisterScreen(),
+        emailVerificationRoute: (ctx) => EmailVerification(),
       },
     );
   }

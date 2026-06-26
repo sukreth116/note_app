@@ -107,18 +107,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
       );
-      Navigator.of(
-        context,
-      ).pushNamedAndRemoveUntil(homeRoute, (route) => false);
+      final user = FirebaseAuth.instance.currentUser;
+      await user?.sendEmailVerification();
+      Navigator.of(context).pushNamed(emailVerificationRoute);
+
+      // Firebase Exceptions  
     } on FirebaseAuthException catch (e) {
       print(e.code);
-      if (e.code == 'weak-password') {
-        showErrorMessage(context, 'The Password is Weak');
+      if (e.code == 'invalid-email') {
+        await showErrorDialogBox(context, 'Invalid Email Format');
+      } else if (e.code == 'channel-error') {
+        await showErrorDialogBox(context, 'Enter Email or password');
+      } else if (e.code == 'weak-password') {
+        await showErrorDialogBox(context, 'The Password is Weak');
+      } else if (e.code == 'email-already-in-use') {
+        await showErrorDialogBox(
+          context,
+          'The email that you is in already use, Please enter another email',
+        );
       }
     }
 
-    _emailController.clear();
-    _passwordController.clear();
+    // _emailController.clear();
+    // _passwordController.clear();
   }
 
   Future<void> _initializeWithDelay() async {

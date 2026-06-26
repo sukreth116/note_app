@@ -103,23 +103,26 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text;
     final password = _passwordController.text;
     if (password.length < 6) {
-      showErrorMessage(context, 'Password must contain atleast 8 characters');
+      showErrorDialogBox(context, 'Password must contain atleast 8 characters');
     } else {
       try {
         final userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil(homeRoute, (route) => false);
+        final user = FirebaseAuth.instance.currentUser;
+        if (user?.emailVerified ?? false) {
+          Navigator.of(context).pushNamed(homeRoute);
+        } else {
+          Navigator.of(context).pushNamed(emailVerificationRoute);
+        }
+
         // print('User Credentials: $userCredential');
       } on FirebaseAuthException catch (e) {
-        // print(e.code);
         if (e.code == 'invalid-credential') {
-          showErrorMessage(context, 'User not found');
+          await showErrorDialogBox(context, 'Error: ${e.code}');
         } else if (e.code == 'invalid-email') {
-          showErrorMessage(context, 'Invalid Email Format');
+          await showErrorDialogBox(context, 'Invalid Email Format');
         } else if (e.code == 'wrong-password') {
-          showErrorMessage(context, 'Password Do not match');
+          await showErrorDialogBox(context, 'Password Do not match');
         }
       }
     }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/login.dart';
 import 'package:flutter_tutorial_first_sample_project/my_notes.dart';
+import 'package:flutter_tutorial_first_sample_project/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
 
 class HomePage extends StatelessWidget {
@@ -24,6 +25,13 @@ class HomePage extends StatelessWidget {
                   // print('email verified');
                 } else {
                   return EmailVerification();
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (ctx) {
+                  //       return EmailVerification();
+                  //     },
+                  //   ),
+                  // );
                 }
               } else {
                 return LoginScreen();
