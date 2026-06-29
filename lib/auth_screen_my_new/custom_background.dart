@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_first_sample_project/auth_screen/auth_view.dart';
-import 'package:flutter_tutorial_first_sample_project/auth_screen/login_form.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/auth_view.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/login_form.dart';
 
 class CustomBackground extends StatelessWidget {
   const CustomBackground({super.key});

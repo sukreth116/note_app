@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_first_sample_project/auth_screen/login_form.dart';
-import 'package:flutter_tutorial_first_sample_project/email_verification.dart';
-import 'package:flutter_tutorial_first_sample_project/form.dart';
-import 'package:flutter_tutorial_first_sample_project/home.dart';
-import 'package:flutter_tutorial_first_sample_project/login.dart';
-import 'package:flutter_tutorial_first_sample_project/auth_screen/custom_background.dart';
-import 'package:flutter_tutorial_first_sample_project/my_notes.dart';
-import 'package:flutter_tutorial_first_sample_project/register.dart';
-import 'package:flutter_tutorial_first_sample_project/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/login_form.dart';
+import 'package:flutter_tutorial_first_sample_project/views/email_verification.dart';
+import 'package:flutter_tutorial_first_sample_project/views/form.dart';
+import 'package:flutter_tutorial_first_sample_project/views/home.dart';
+import 'package:flutter_tutorial_first_sample_project/views/login.dart';
+import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/custom_background.dart';
+import 'package:flutter_tutorial_first_sample_project/views/my_notes.dart';
+import 'package:flutter_tutorial_first_sample_project/views/register.dart';
+import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

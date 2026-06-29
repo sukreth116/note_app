@@ -1,4 +1,3 @@
-
 final loginRoute = '/login/';
 final registerRoute = '/register/';
 final homeRoute = '/home/';

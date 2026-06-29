@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_first_sample_project/firebase_options.dart';
-import 'package:flutter_tutorial_first_sample_project/login.dart';
+import 'package:flutter_tutorial_first_sample_project/utilities/firebase_options.dart';
+import 'package:flutter_tutorial_first_sample_project/views/login.dart';
 
 Future<void> showErrorMessage(BuildContext context, String errorMessage) async {
   ScaffoldMessenger.of(context).showSnackBar(

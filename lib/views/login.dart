@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_tutorial_first_sample_project/home.dart';
-import 'package:flutter_tutorial_first_sample_project/routes.dart';
-import 'firebase_options.dart';
-import 'package:flutter_tutorial_first_sample_project/screen_functions.dart';
+import 'package:flutter_tutorial_first_sample_project/views/home.dart';
+import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import '../utilities/firebase_options.dart';
+import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
