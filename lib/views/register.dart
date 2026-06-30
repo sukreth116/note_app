@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 import '../utilities/firebase_options.dart';
 
@@ -34,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: FutureBuilder(
           // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
-          future: _initializeWithDelay(),
+          future: AuthServices.firebase().initialize(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
@@ -103,30 +105,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final password = _passwordController.text;
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await AuthServices.firebase().createUser(
         email: email,
         password: password,
       );
-      final user = FirebaseAuth.instance.currentUser;
-      await user?.sendEmailVerification();
+      await AuthServices.firebase().senEmailVerification();
+
       Navigator.of(context).pushNamed(emailVerificationRoute);
 
-      // Firebase Exceptions  
-    } on FirebaseAuthException catch (e) {
-      print(e.code);
-      if (e.code == 'invalid-email') {
-        await showErrorDialogBox(context, 'Invalid Email Format');
-      } else if (e.code == 'channel-error') {
-        await showErrorDialogBox(context, 'Enter Email or password');
-      } else if (e.code == 'weak-password') {
-        await showErrorDialogBox(context, 'The Password is Weak');
-      } else if (e.code == 'email-already-in-use') {
-        await showErrorDialogBox(
-          context,
-          'The email that you is in already use, Please enter another email',
-        );
-      }
-    }
+      // Firebase Exceptions
+    } on WeakPasswordAuthException {
+      await showErrorDialogBox(context, 'Weak Passoword');
+    } on EmailAlreadyInUseException {
+      await showErrorDialogBox(context, 'Email already Exist');
+    } on InvalidEmailException {
+      await showErrorDialogBox(context, 'Invalid Email');
+    } on GenericAuthException {
+      await showErrorDialogBox(context, 'Unable To Register');
+    } 
 
     // _emailController.clear();
     // _passwordController.clear();

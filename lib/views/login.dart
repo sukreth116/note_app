@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/views/home.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import '../utilities/firebase_options.dart';
@@ -35,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: FutureBuilder(
           // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
-          future: _initializeWithDelay(),
+          future: AuthServices.firebase().initialize(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
@@ -102,40 +104,36 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> loginUser() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    if (password.length < 6) {
-      showErrorDialogBox(context, 'Password must contain atleast 8 characters');
-    } else {
-      try {
-        final userCredential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
-        final user = FirebaseAuth.instance.currentUser;
-        if (user?.emailVerified ?? false) {
-          Navigator.of(context).pushNamed(homeRoute);
-        } else {
-          Navigator.of(context).pushNamed(emailVerificationRoute);
-        }
 
-        // print('User Credentials: $userCredential');
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'invalid-credential') {
-          await showErrorDialogBox(context, 'Error: ${e.code}');
-        } else if (e.code == 'invalid-email') {
-          await showErrorDialogBox(context, 'Invalid Email Format');
-        } else if (e.code == 'wrong-password') {
-          await showErrorDialogBox(context, 'Password Do not match');
-        }
+    try {
+      await AuthServices.firebase().logIn(email: email, password: password);
+      final user = AuthServices.firebase().currentUser;
+      if (user?.isEmailVerified ?? false) {
+        Navigator.of(context).pushNamed(homeRoute);
+      } else {
+        Navigator.of(context).pushNamed(emailVerificationRoute);
       }
+
+      // print('User Credentials: $userCredential');
+    } on UserNotFountException {
+      await showErrorDialogBox(context, 'User not found');
+    } on WrongPasswordAuthException {
+      await showErrorDialogBox(context, 'Wrong Password');
+    } on GenericAuthException {
+      await showErrorDialogBox(context, 'Authentication Error');
     }
   }
 
-  Future<void> _initializeWithDelay() async {
-    // await Future.delayed(Duration(seconds: 3)); // fake delay
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    final user = FirebaseAuth.instance.currentUser;
-    print('print user if, active before login screen $user');
-  }
+  // Future<void> _initializeWithDelay() async {
+  //   // await Future.delayed(Duration(seconds: 3)); // fake delay
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  //   final user = FirebaseAuth.instance.currentUser;
+  //   print('print user if, active before login screen $user');
+  // }
+
+  // Now don't need this because initize function defined in authservice
 
   @override
   void dispose() {

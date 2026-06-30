@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class MyNotes extends StatefulWidget {
@@ -7,8 +8,6 @@ class MyNotes extends StatefulWidget {
   @override
   State<MyNotes> createState() => _MyNotesState();
 }
-
-enum MenuAction { logout }
 
 class _MyNotesState extends State<MyNotes> {
   @override
