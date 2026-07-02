@@ -1,11 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/views/home.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
-import '../utilities/firebase_options.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -108,13 +104,20 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await AuthServices.firebase().logIn(email: email, password: password);
       final user = AuthServices.firebase().currentUser;
+      print(user);
       if (user?.isEmailVerified ?? false) {
-        Navigator.of(context).pushNamed(homeRoute);
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
       } else {
-        Navigator.of(context).pushNamed(emailVerificationRoute);
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(emailVerificationRoute, (route) => false);
       }
 
       // print('User Credentials: $userCredential');
+    } on InvalidCredentialException {
+      await showErrorDialogBox(context, 'Invalid Credentials');
     } on UserNotFountException {
       await showErrorDialogBox(context, 'User not found');
     } on WrongPasswordAuthException {
@@ -133,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //   print('print user if, active before login screen $user');
   // }
 
-  // Now don't need this because initize function defined in authservice
+  // Now don't need this because initialize function defined in authservice
 
   @override
   void dispose() {

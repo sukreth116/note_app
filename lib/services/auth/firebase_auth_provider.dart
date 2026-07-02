@@ -73,10 +73,13 @@ class FirebaseAuthProvider implements AuthProvider {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
-        throw InvalidCredential();
-      } else if (e.code == 'invalid-email') {
+        print(e.code);
+        throw InvalidCredentialException();
+      } else if (e.code == 'Invalid-email') {
+        print(e.code);
         throw InvalidEmailException();
       } else if (e.code == 'wrong-password') {
+        print(e.code);
         throw WrongPasswordAuthException();
       } else {
         throw GenericAuthException();
@@ -97,7 +100,7 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<void> senEmailVerification() async {
+  Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {

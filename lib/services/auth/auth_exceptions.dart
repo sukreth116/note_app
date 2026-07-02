@@ -12,4 +12,4 @@ class GenericAuthException implements Exception {}
 
 class UserNotLoggedInAuthException implements Exception {}
 
-class InvalidCredential implements Exception {}
+class InvalidCredentialException implements Exception {}

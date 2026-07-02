@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class EmailVerification extends StatefulWidget {
   const EmailVerification({super.key});
@@ -12,6 +11,7 @@ class EmailVerification extends StatefulWidget {
 }
 
 class _EmailVerificationState extends State<EmailVerification> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +26,15 @@ class _EmailVerificationState extends State<EmailVerification> {
             Text("Didn't receive the mail press the button bellow"),
             TextButton(
               onPressed: () async {
-                await AuthServices.firebase().senEmailVerification();
+                await AuthServices.firebase().sendEmailVerification();
                 // final user = FirebaseAuth.instance.currentUser;
                 // await user?.sendEmailVerification();  senEmailVerification is not user level anymore
               },
               child: Text('Send verification link'),
+            ),
+            ElevatedButton(
+              onPressed: checkEmailVerified,
+              child: Text('check email verified'),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -45,5 +49,10 @@ class _EmailVerificationState extends State<EmailVerification> {
         ),
       ),
     );
+  }
+
+  void checkEmailVerified() {
+    final user = FirebaseAuth.instance.currentUser;
+    print(user);
   }
 }

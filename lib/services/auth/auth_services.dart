@@ -1,5 +1,4 @@
-import 'package:flutter_tutorial_first_sample_project/services/auth/firebase_auth_provider.dart';
-
+import 'firebase_auth_provider.dart';
 import 'auth_provider.dart';
 import 'auth_user.dart';
 
@@ -26,7 +25,7 @@ class AuthServices implements AuthProvider {
   Future<void> logOut() => provider.logOut();
 
   @override
-  Future<void> senEmailVerification() => provider.senEmailVerification();
+  Future<void> sendEmailVerification() => provider.sendEmailVerification();
 
   @override
   Future<void> initialize() => provider.initialize();

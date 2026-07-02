@@ -1,11 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
-import '../utilities/firebase_options.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -109,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: email,
         password: password,
       );
-      await AuthServices.firebase().senEmailVerification();
+      await AuthServices.firebase().sendEmailVerification();
 
       Navigator.of(context).pushNamed(emailVerificationRoute);
 
@@ -122,18 +120,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await showErrorDialogBox(context, 'Invalid Email');
     } on GenericAuthException {
       await showErrorDialogBox(context, 'Unable To Register');
-    } 
-
-    // _emailController.clear();
-    // _passwordController.clear();
+    }
   }
 
-  Future<void> _initializeWithDelay() async {
-    // await Future.delayed(Duration(seconds: 3)); // fake delay
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
+  // Future<void> _initializeWithDelay() async {
+  //   // await Future.delayed(Duration(seconds: 3)); // fake delay
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  // }
 
   @override
   void dispose() {

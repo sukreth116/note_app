@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
@@ -38,9 +39,20 @@ class _MyNotesState extends State<MyNotes> {
         ],
       ),
 
-      body: Column(children: [Text('Welcome to homepage')]),
+      body: Column(
+        children: [
+          Text('Welcome to homepage'),
+          ElevatedButton(onPressed: checkEmailVerified, child: Text('check')),
+        ],
+      ),
     );
   }
+  
+}
+
+void checkEmailVerified() {
+  final user = FirebaseAuth.instance.currentUser;
+  print(user);
 }
 
 Future<bool> showDialogueBar(BuildContext context) async {
