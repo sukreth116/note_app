@@ -11,7 +11,6 @@ class EmailVerification extends StatefulWidget {
 }
 
 class _EmailVerificationState extends State<EmailVerification> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +32,9 @@ class _EmailVerificationState extends State<EmailVerification> {
               child: Text('Send verification link'),
             ),
             ElevatedButton(
-              onPressed: checkEmailVerified,
+              onPressed: () async {
+                checkEmailVerified();
+              },
               child: Text('check email verified'),
             ),
             ElevatedButton(
@@ -51,8 +52,20 @@ class _EmailVerificationState extends State<EmailVerification> {
     );
   }
 
-  void checkEmailVerified() {
+  Future<void> checkEmailVerified() async {
     final user = FirebaseAuth.instance.currentUser;
-    print(user);
+
+    await user?.reload();
+    final refreshedUser = FirebaseAuth.instance.currentUser;
+    print(refreshedUser);
+    if (refreshedUser != null && refreshedUser.emailVerified) {
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Email not verified yet')));
+    }
   }
 }

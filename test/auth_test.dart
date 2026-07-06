@@ -9,19 +9,17 @@ void main() {
     test('It should not be initialized to begin with', () {
       expect(provider.isInitialized, false);
     });
-
     test('Cannot log out if not Initialized', () {
       expect(
         provider.logOut(),
         throwsA(const TypeMatcher<NotInitializedException>()),
       );
     });
-
     test('should be able to initialized', () async {
       await provider.initialize();
       expect(provider.isInitialized, true);
     });
-
+    
     test('User should be able to initialized', () {
       expect(provider.currentUser, null);
     });
@@ -34,6 +32,7 @@ void main() {
       },
       timeout: const Timeout(Duration(seconds: 4)),
     );
+
     test('Create user should delegate to login function', () async {
       final badEmailUser = await provider.createUser(
         email: 'sukrethom2000@gmail.com',
