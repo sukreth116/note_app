@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/views/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/views/login.dart';
-import 'package:flutter_tutorial_first_sample_project/views/my_notes.dart';
+import 'package:flutter_tutorial_first_sample_project/views/note/my_notes.dart';
 
 
 class HomePage extends StatelessWidget {

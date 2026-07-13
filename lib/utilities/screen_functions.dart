@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/firebase_options.dart';
 
@@ -46,5 +47,5 @@ Future<void> initializeWithDelay() async {
 
 Future<void> userLogout(BuildContext context) async {
   await AuthServices.firebase().logOut();
-  Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
+  Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
 }

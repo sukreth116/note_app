@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
+import 'package:flutter_tutorial_first_sample_project/services/crud/notes_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
+import 'package:flutter_tutorial_first_sample_project/views/note/add_note.dart';
 
 class MyNotes extends StatefulWidget {
   const MyNotes({super.key});
@@ -11,12 +14,39 @@ class MyNotes extends StatefulWidget {
 }
 
 class _MyNotesState extends State<MyNotes> {
+  late final NotesServices _notesServices;
+  String get userEmail => AuthServices.firebase().currentUser!.email!;
+
+  @override
+  void initState() {
+    _notesServices = NotesServices();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _notesServices.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MY NOTES'),
+        title: Text('MY NOTES VIEW'),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) {
+                    return AddNote();
+                  },
+                ),
+              );
+            },
+            icon: Icon(Icons.add),
+          ),
           PopupMenuButton(
             onSelected: (value) async {
               switch (value) {
@@ -39,15 +69,29 @@ class _MyNotesState extends State<MyNotes> {
         ],
       ),
 
-      body: Column(
-        children: [
-          Text('Welcome to homepage'),
-          ElevatedButton(onPressed: checkEmailVerified, child: Text('check')),
-        ],
+      body: FutureBuilder(
+        future: _notesServices.getOrCreateUser(email: userEmail),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return StreamBuilder(
+                stream: _notesServices.allNotes,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Text('Waiting for all notes');
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              );
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
       ),
     );
   }
-  
 }
 
 void checkEmailVerified() {
@@ -80,30 +124,3 @@ Future<bool> showDialogueBar(BuildContext context) async {
     },
   ).then((value) => value ?? false);
 }
-
-// Future<bool> showDialogueBar(BuildContext context) async {
-//   final result = await showDialog<bool>(
-//     context: context,
-//     builder: (ctx) {
-//       return AlertDialog(
-//         title: Text('Logout!'),
-//         content: Text('Are you sure do you want to logout?'),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(ctx).pop(false);
-//             },
-//             child: Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(ctx).pop(true);
-//             },
-//             child: Text('Logout', style: TextStyle(color: Colors.red)),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-//   return result ?? false;
-// }
