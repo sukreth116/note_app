@@ -20,13 +20,8 @@ class _MyNotesState extends State<MyNotes> {
   @override
   void initState() {
     _notesServices = NotesServices();
+    // _notesServices.open();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _notesServices.close();
-    super.dispose();
   }
 
   @override
@@ -68,7 +63,6 @@ class _MyNotesState extends State<MyNotes> {
           ),
         ],
       ),
-
       body: FutureBuilder(
         future: _notesServices.getOrCreateUser(email: userEmail),
         builder: (context, snapshot) {
@@ -80,7 +74,25 @@ class _MyNotesState extends State<MyNotes> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text('Waiting for all notes');
+                      if (snapshot.hasData) {
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        return ListView.builder(
+                          itemBuilder: (context, index) {
+                            final note = allNotes[index];
+                            return ListTile(
+                              title: Text(
+                                note.text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                          itemCount: allNotes.length,
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
                     default:
                       return const CircularProgressIndicator();
                   }

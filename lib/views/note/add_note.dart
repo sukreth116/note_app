@@ -19,6 +19,13 @@ class _AddNoteState extends State<AddNote> {
     _notesServices = NotesServices();
     _textController = TextEditingController();
     super.initState();
+    _initializeNote();
+  }
+
+  Future<void> _initializeNote() async {
+    final note = await createNewNote();
+    _note = note; // ✅ THIS IS MISSING IN YOUR CODE
+    _setupTextControllerListener();
   }
 
   Future<void> _textControllerListener() async {
@@ -42,30 +49,40 @@ class _AddNoteState extends State<AddNote> {
     }
     final currentUser = AuthServices.firebase().currentUser!;
     final email = currentUser.email!;
-    final owner = await _notesServices.getUser(email: email);
+    final owner = await _notesServices.getOrCreateUser(email: email);
     final newNote = await _notesServices.createNote(owner: owner);
+    _note = newNote;
     return newNote;
   }
 
-  void _deleteNoteIfTextIsEmpty() {
-    final note = _note;
-    if (_textController.text.isEmpty && note != null) {
-      _notesServices.deleteNote(id: note.id);
-    }
-  }
+  // void _deleteNoteIfTextIsEmpty() {
+  //   final note = _note;
+  //   if (_textController.text.isEmpty && note != null) {
+  //     _notesServices.deleteNote(id: note.id);
+  //   }
+  // }
 
-  Future<void> _saveNoteIfTextNotEmpty() async {
+  // Future<void> _saveNoteIfTextNotEmpty() async {
+  //   final note = _note;
+  //   final text = _textController.text;
+  //   if (note != null && text.isNotEmpty) {
+  //     await _notesServices.updateNote(note: note, text: text);
+  //   }
+  // }
+  void saveOrDeleteNote() {
     final note = _note;
-    final text = _textController.text;
-    if (note != null && text.isNotEmpty) {
-      await _notesServices.updateNote(note: note, text: text);
+    if (note != null) {
+      if (_textController.text.isEmpty) {
+        _notesServices.deleteNote(id: note.id);
+      } else {
+        _notesServices.updateNote(note: note, text: _textController.text);
+      }
     }
   }
 
   @override
   void dispose() {
-    _deleteNoteIfTextIsEmpty();
-    _saveNoteIfTextNotEmpty();
+    saveOrDeleteNote();
     _textController.dispose();
     super.dispose();
   }
@@ -79,15 +96,16 @@ class _AddNoteState extends State<AddNote> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              _note = snapshot.data as DatabaseNote;
+              _note = snapshot.data as DatabaseNote?;
               _setupTextControllerListener();
               return TextField(
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration:const InputDecoration(hintText: 'Start typing your notes'),
+                decoration: const InputDecoration(
+                  hintText: 'Start typing your notes',
+                ),
               );
-              
             default:
               return const CircularProgressIndicator();
           }
