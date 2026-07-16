@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -117,13 +118,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // print('User Credentials: $userCredential');
     } on InvalidCredentialException {
-      await showErrorDialogBox(context, 'Invalid Credentials');
+      await showErrorDialog(context, 'Invalid Credentials');
     } on UserNotFountException {
-      await showErrorDialogBox(context, 'User not found');
+      await showErrorDialog(context, 'User not found');
     } on WrongPasswordAuthException {
-      await showErrorDialogBox(context, 'Wrong Password');
+      await showErrorDialog(context, 'Wrong Password');
     } on GenericAuthException {
-      await showErrorDialogBox(context, 'Authentication Error');
+      await showErrorDialog(context, 'Authentication Error');
     }
   }
 

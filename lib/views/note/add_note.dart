@@ -10,6 +10,7 @@ class AddNote extends StatefulWidget {
 }
 
 class _AddNoteState extends State<AddNote> {
+  bool _isLoading = true;
   DatabaseNote? _note;
   late final NotesServices _notesServices;
   late final TextEditingController _textController;
@@ -26,6 +27,10 @@ class _AddNoteState extends State<AddNote> {
     final note = await createNewNote();
     _note = note; // ✅ THIS IS MISSING IN YOUR CODE
     _setupTextControllerListener();
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> _textControllerListener() async {
@@ -50,6 +55,12 @@ class _AddNoteState extends State<AddNote> {
     final currentUser = AuthServices.firebase().currentUser!;
     final email = currentUser.email!;
     final owner = await _notesServices.getOrCreateUser(email: email);
+
+    if (existingNote != null) {
+      if (_textController.text.isNotEmpty) {
+        
+      }
+    }
     final newNote = await _notesServices.createNote(owner: owner);
     _note = newNote;
     return newNote;
@@ -87,30 +98,46 @@ class _AddNoteState extends State<AddNote> {
     super.dispose();
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(title: Text('New Note')),
+  //     body: FutureBuilder(
+  //       future: createNewNote(),
+  //       builder: (context, snapshot) {
+  //         switch (snapshot.connectionState) {
+  //           case ConnectionState.done:
+  //             _note = snapshot.data as DatabaseNote;
+  //             _setupTextControllerListener();
+  //             return TextField(
+  //               controller: _textController,
+  //               keyboardType: TextInputType.multiline,
+  //               maxLines: null,
+  //               decoration: const InputDecoration(
+  //                 hintText: 'Start typing your notes',
+  //               ),
+  //             );
+  //           default:
+  //             return const CircularProgressIndicator();
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('New Note')),
-      body: FutureBuilder(
-        future: createNewNote(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              _note = snapshot.data as DatabaseNote?;
-              _setupTextControllerListener();
-              return TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your notes',
-                ),
-              );
-            default:
-              return const CircularProgressIndicator();
-          }
-        },
-      ),
+      appBar: AppBar(title: const Text('New Note')),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : TextField(
+              controller: _textController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: const InputDecoration(
+                hintText: 'Start typing your notes',
+              ),
+            ),
     );
   }
 }

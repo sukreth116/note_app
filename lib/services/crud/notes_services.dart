@@ -160,6 +160,7 @@ class NotesServices {
       throw CouldNotFindUserException();
     }
     const text = '';
+    
     final noteId = await db.insert(noteTable, {
       userIdColumn: owner.id,
       textColumn: text,

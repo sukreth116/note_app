@@ -49,3 +49,29 @@ Future<void> userLogout(BuildContext context) async {
   await AuthServices.firebase().logOut();
   Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
 }
+
+Future<bool> showLogoutDialogBar(BuildContext context) async {
+  return showDialog<bool>(
+    context: context,
+    builder: (ctx) {
+      return AlertDialog(
+        title: Text('Logout!'),
+        content: Text('Are you sure do you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(false);
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(true);
+            },
+            child: Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
+}

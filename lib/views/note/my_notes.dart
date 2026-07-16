@@ -1,10 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/services/crud/notes_services.dart';
+import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 import 'package:flutter_tutorial_first_sample_project/views/note/add_note.dart';
+import 'package:flutter_tutorial_first_sample_project/views/note/note_list_view.dart';
 
 class MyNotes extends StatefulWidget {
   const MyNotes({super.key});
@@ -46,7 +47,7 @@ class _MyNotesState extends State<MyNotes> {
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
-                  final shouldLogout = await showDialogueBar(context);
+                  final shouldLogout = await showLogoutDialog(context);
                   if (shouldLogout) {
                     await userLogout(context);
                   }
@@ -76,19 +77,11 @@ class _MyNotesState extends State<MyNotes> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
-                        return ListView.builder(
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
+                        return NoteListView(
+                          notesList: allNotes,
+                          onDeleteNote: (note) async {
+                            await _notesServices.deleteNote(id: note.id);
                           },
-                          itemCount: allNotes.length,
                         );
                       } else {
                         return const CircularProgressIndicator();
@@ -105,35 +98,4 @@ class _MyNotesState extends State<MyNotes> {
       ),
     );
   }
-}
-
-void checkEmailVerified() {
-  final user = FirebaseAuth.instance.currentUser;
-  print(user);
-}
-
-Future<bool> showDialogueBar(BuildContext context) async {
-  return showDialog<bool>(
-    context: context,
-    builder: (ctx) {
-      return AlertDialog(
-        title: Text('Logout!'),
-        content: Text('Are you sure do you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(false);
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(true);
-            },
-            child: Text('Logout', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }

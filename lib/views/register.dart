@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
+import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -113,13 +113,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       // Firebase Exceptions
     } on WeakPasswordAuthException {
-      await showErrorDialogBox(context, 'Weak Passoword');
+      await showErrorDialog(context, 'Weak Passoword');
     } on EmailAlreadyInUseException {
-      await showErrorDialogBox(context, 'Email already Exist');
+      await showErrorDialog(context, 'Email already Exist');
     } on InvalidEmailException {
-      await showErrorDialogBox(context, 'Invalid Email');
+      await showErrorDialog(context, 'Invalid Email');
     } on GenericAuthException {
-      await showErrorDialogBox(context, 'Unable To Register');
+      await showErrorDialog(context, 'Unable To Register');
     }
   }
 
