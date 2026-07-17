@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/services/crud/notes_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
-import 'package:flutter_tutorial_first_sample_project/views/note/add_note.dart';
+import 'package:flutter_tutorial_first_sample_project/views/note/create_update_note.dart';
 import 'package:flutter_tutorial_first_sample_project/views/note/note_list_view.dart';
 
 class MyNotes extends StatefulWidget {
@@ -36,7 +37,7 @@ class _MyNotesState extends State<MyNotes> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) {
-                    return AddNote();
+                    return CreateUpdateNote();
                   },
                 ),
               );
@@ -78,6 +79,9 @@ class _MyNotesState extends State<MyNotes> {
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
                         return NoteListView(
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(createOrUpdateRoute,arguments: note);
+                          },
                           notesList: allNotes,
                           onDeleteNote: (note) async {
                             await _notesServices.deleteNote(id: note.id);

@@ -8,7 +8,7 @@ Future<T?> showGenericDialog<T>({
   required String content,
   required DialogOptionBuilder optionsBuilder,
 }) async {
-  final options = optionsBuilder();
+  final options = optionsBuilder(); // optionBuilder() is function with return type Map, so we store the map into the variable
   return showDialog<T>(
     context: context,
     builder: (context) {

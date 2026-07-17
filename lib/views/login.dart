@@ -3,7 +3,6 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/auth_excepti
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
-import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

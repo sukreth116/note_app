@@ -6,7 +6,7 @@ Future<bool> showDeleteDialog(BuildContext context) {
     context: context,
     title: 'Delete',
     content: 'Are you sure, do you want to delete note?',
-    optionsBuilder:() => {
+    optionsBuilder:() => {           // in here passing a map with String and bool
       'Cancel':false,
       'Delete':true,
     },
