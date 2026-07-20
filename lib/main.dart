@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_first_sample_project/views/email_verification.dart';
-import 'package:flutter_tutorial_first_sample_project/views/home.dart';
-import 'package:flutter_tutorial_first_sample_project/views/login.dart';
-import 'package:flutter_tutorial_first_sample_project/views/note/create_update_note.dart';
-import 'package:flutter_tutorial_first_sample_project/views/note/my_notes.dart';
-import 'package:flutter_tutorial_first_sample_project/views/register.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/email_verification.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/home.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/login.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 
 void main() {

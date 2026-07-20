@@ -23,7 +23,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
     super.initState();
     // _initializeNote();
   }
-
+  
   // Future<void> _initializeNote() async {
   //   final note = await createOrGetExistingNote(context);
   //   _note = note; // ✅ THIS IS MISSING IN YOUR CODE
@@ -49,12 +49,14 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   }
 
   Future<DatabaseNote> createOrGetExistingNote(BuildContext context) async {
+    
     final widgetNote = context.getArgument<DatabaseNote>();
     if (widgetNote != null) {
       _note = widgetNote;
       _textController.text = widgetNote.text;
       return widgetNote;
     }
+    
     // ModalRoute.of(context)?.settings.arguments;
 
     final existingNote = _note;
@@ -83,6 +85,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   //     await _notesServices.updateNote(note: note, text: text);
   //   }
   // }
+
   void saveOrDeleteNote() {
     final note = _note;
     if (note != null) {

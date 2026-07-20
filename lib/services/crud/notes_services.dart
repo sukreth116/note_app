@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_tutorial_first_sample_project/extensions/list/filter.dart';
 import 'notes_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' show join;
@@ -9,19 +10,33 @@ class NotesServices {
 
   List<DatabaseNote> _note = [];
 
+  DatabaseUser? _user;
+
   static final NotesServices _shared = NotesServices._sharedInstance();
+
   NotesServices._sharedInstance() {
     _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
       onListen: () {
         _notesStreamController.sink.add(_note);
       },
     );
+
+    // final _myStream = StreamController<List<DatabaseNote>>; // created just for know without .broadcast()
   }
+
   factory NotesServices() => _shared;
 
   late final StreamController<List<DatabaseNote>> _notesStreamController;
 
-  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes =>
+      _notesStreamController.stream.filter((note) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return note.userId == currentUser.id;
+        } else {
+          throw UserShouldBeSetBeforeReadingAllNotes();
+        }
+      });
 
   // Future<DatabaseUser> getOrCreateUser({required String email}) async {
   //   try {
@@ -34,16 +49,32 @@ class NotesServices {
   //     rethrow;
   //   }
   // }
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurresntUser = true,
+  }) async {
     try {
       final user = await getUser(email: email);
+      if (setAsCurresntUser) {
+        _user = user;
+      }
       await _cacheNotes(user); // ✅ IMPORTANT
       return user;
     } on CouldNotFindUserException {
       final createdUser = await createUser(email: email);
+      if (setAsCurresntUser) {
+        _user = createdUser;
+      }
       await _cacheNotes(createdUser); // ✅ IMPORTANT
       return createdUser;
     }
+  }
+
+  Future<void> _cacheNotes(DatabaseUser user) async {
+    final allNotes = await getNotesForUser(user: user);
+    _note = allNotes.toList();
+    _notesStreamController.add(_note);
   }
 
   // my function
@@ -60,15 +91,6 @@ class NotesServices {
     );
 
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
-  }
-
-  Future<void> _cacheNotes(DatabaseUser user) async {
-    // final allNotes = await getAllNotes();
-    //   _note = allNotes.toList();
-    // _notesStreamController.add(_note);
-    final allNotes = await getNotesForUser(user: user);
-    _note = allNotes.toList();
-    _notesStreamController.add(_note);
   }
 
   Future<DatabaseNote> updateNote({
@@ -160,7 +182,7 @@ class NotesServices {
       throw CouldNotFindUserException();
     }
     const text = '';
-    
+
     final noteId = await db.insert(noteTable, {
       userIdColumn: owner.id,
       textColumn: text,
@@ -274,6 +296,7 @@ class NotesServices {
   //     throw UnableGetDocumentDirectoryException();
   //   }
   // }
+
   Future<void> open() async {
     if (_db != null) return; // ✅ FIX (don't throw)
 

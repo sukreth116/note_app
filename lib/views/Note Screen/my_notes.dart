@@ -5,19 +5,19 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/auth_service
 import 'package:flutter_tutorial_first_sample_project/services/crud/notes_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
-import 'package:flutter_tutorial_first_sample_project/views/note/create_update_note.dart';
-import 'package:flutter_tutorial_first_sample_project/views/note/note_list_view.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/note_list_view.dart';
 
 class MyNotes extends StatefulWidget {
   const MyNotes({super.key});
 
-  @override
+  @override 
   State<MyNotes> createState() => _MyNotesState();
 }
 
 class _MyNotesState extends State<MyNotes> {
   late final NotesServices _notesServices;
-  String get userEmail => AuthServices.firebase().currentUser!.email!;
+  String get currentUserEmail => AuthServices.firebase().currentUser!.email!;
 
   @override
   void initState() {
@@ -25,6 +25,9 @@ class _MyNotesState extends State<MyNotes> {
     // _notesServices.open();
     super.initState();
   }
+
+  // This is the starting point when we create an instance factory contructor
+  // NotesServices and NotesServices._sharedInstance trigger                 
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,7 @@ class _MyNotesState extends State<MyNotes> {
         ],
       ),
       body: FutureBuilder(
-        future: _notesServices.getOrCreateUser(email: userEmail),
+        future: _notesServices.getOrCreateUser(email: currentUserEmail),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
@@ -79,8 +82,13 @@ class _MyNotesState extends State<MyNotes> {
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
                         return NoteListView(
-                          onTap: (note) {
-                            Navigator.of(context).pushNamed(createOrUpdateRoute,arguments: note);
+                          // in here we are calling NoteListView. So the arguments are passed. as like the onTap parameter expect a function.
+                          onTapFunction: (DatabaseNote note) {
+                            // so we pass a anonymous function definition in that anonymous function parameter is DatabaseNote note
+                            Navigator.of(
+                              // so like onTap we pass onDelete
+                              context,
+                            ).pushNamed(createOrUpdateRoute, arguments: note);
                           },
                           notesList: allNotes,
                           onDeleteNote: (note) async {
