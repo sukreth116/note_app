@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/services/crud/notes_services.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/firebase_cloud_storage.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
@@ -16,12 +17,12 @@ class MyNotes extends StatefulWidget {
 }
 
 class _MyNotesState extends State<MyNotes> {
-  late final NotesServices _notesServices;
-  String get currentUserEmail => AuthServices.firebase().currentUser!.email;
+  late final FirebaseCloudStorage _notesServices;
+  String get userId => AuthServices.firebase().currentUser!.id;
 
   @override
   void initState() {
-    _notesServices = NotesServices();
+    _notesServices = FirebaseCloudStorage();
     // _notesServices.open();
     super.initState();
   }
@@ -68,22 +69,17 @@ class _MyNotesState extends State<MyNotes> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: _notesServices.getOrCreateUser(email: currentUserEmail),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              return StreamBuilder(
-                stream: _notesServices.allNotes,
+      body: StreamBuilder(
+                stream: _notesServices.allNotes(ownerUserId: userId),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
                       if (snapshot.hasData) {
-                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        final allNotes = snapshot.data as Iterable<CloudNote>;
                         return NoteListView(
                           // in here we are calling NoteListView. So the arguments are passed. as like the onTap parameter expect a function.
-                          onTapFunction: (DatabaseNote note) {
+                          onTapFunction: (CloudNote note) {
                             // so we pass a anonymous function definition in that anonymous function parameter is DatabaseNote note
                             Navigator.of(
                               // so like onTap we pass onDelete
@@ -92,7 +88,7 @@ class _MyNotesState extends State<MyNotes> {
                           },
                           notesList: allNotes,
                           onDeleteNote: (note) async {
-                            await _notesServices.deleteNote(id: note.id);
+                            await _notesServices.deleteNote(documentId: note.documentId);
                           },
                         );
                       } else {
@@ -102,12 +98,7 @@ class _MyNotesState extends State<MyNotes> {
                       return const CircularProgressIndicator();
                   }
                 },
-              );
-            default:
-              return const CircularProgressIndicator();
-          }
-        },
-      ),
+              )
     );
   }
 }
