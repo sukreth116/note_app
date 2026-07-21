@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 
 @immutable
 class AuthUser {
-  final String? email;
+  final String id;
+  final String email;
   final bool isEmailVerified;
 
   // Constructor
-  const AuthUser({required this.isEmailVerified, required this.email});
-  // Factory Constructor
-  factory AuthUser.fromFirebase(User user) =>
-      AuthUser(isEmailVerified: user.emailVerified, email: user.email);
-}
+  const AuthUser({
+    required this.id,
+    required this.isEmailVerified,
+    required this.email,
+  });
 
-// void function() { 
-//   final obj = AuthUser(true);
-//   final obj2 = AuthUser.fromFirebase(user);
-// }
+  // Factory Constructor
+  factory AuthUser.fromFirebase(User user) => AuthUser(
+    id: user.uid,
+    email: user.email!,
+    isEmailVerified: user.emailVerified,
+  );
+}
