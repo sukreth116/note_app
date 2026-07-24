@@ -6,6 +6,8 @@ Future<void> showErrorDialog(BuildContext context, String text) async {
     context: context,
     title: 'An Error Occured',
     content: text,
-    optionsBuilder: () => {'Ok': null},
+    optionsBuilder: () {
+      return {'Ok': null};
+    },
   );
 }

@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await AuthServices.firebase().logIn(email: email, password: password);
       final user = AuthServices.firebase().currentUser;
-      print(user);
+      
       if (user?.isEmailVerified ?? false) {
         Navigator.of(
           context,

@@ -8,14 +8,16 @@ Future<T?> showGenericDialog<T>({
   required String content,
   required DialogOptionBuilder optionsBuilder,
 }) async {
-  final options = optionsBuilder(); // optionBuilder() is function with return type Map, so we store the map into the variable
+  final options =
+      optionsBuilder(); // optionBuilder() is function with return type Map and will return a map like {'Ok':null},
   return showDialog<T>(
+    // so we store the map into the variable. now options contain a map
     context: context,
     builder: (context) {
       return AlertDialog(
         title: Text(title),
         content: Text(content),
-        actions: options.keys.map((optionTitle) {
+        actions: options.keys.map((optionTitle) { // optionTitle is a single string of that iterable
           final value = options[optionTitle];
           return TextButton(
             onPressed: () {
