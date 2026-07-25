@@ -6,6 +6,7 @@ import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/views/counter_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      home: HomePage(),
+      home: CounterApp(),
       routes: {
         homeRoute: (ctx) => HomePage(),
         notesRoute: (ctx) => MyNotes(),
