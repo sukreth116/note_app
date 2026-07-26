@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';

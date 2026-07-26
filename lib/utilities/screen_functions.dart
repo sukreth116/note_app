@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
+
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/firebase_options.dart';

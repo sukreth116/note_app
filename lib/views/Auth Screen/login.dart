@@ -5,6 +5,7 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/auth_service
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -64,11 +65,38 @@ class _LoginScreenState extends State<LoginScreen> {
                         enableSuggestions: false,
                         decoration: InputDecoration(hintText: 'Enter password'),
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await loginUser();
+                      BlocListener<AuthBloc, AuthState>(
+                        listener: (context, state) async {
+                          if (state is AuthStateLoggedOut) {
+                            if (state.exception is UserNotFountException) {
+                              await showErrorDialog(context, 'User not found');
+                            } else if (state.exception
+                                is WrongPasswordAuthException) {
+                              await showErrorDialog(
+                                context,
+                                'Wrong user credentials',
+                              );
+                            } else if (state.exception
+                                is GenericAuthException) {
+                              await showErrorDialog(
+                                context,
+                                'Authentication Error',
+                              );
+                            } else {
+                              await showErrorDialog(context, 'General Error');
+                            }
+                          }
                         },
-                        child: Text('Login'),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final email = _emailController.text;
+                            final password = _passwordController.text;
+                            context.read<AuthBloc>().add(
+                              AuthEventLogIn(email, password),
+                            );
+                          },
+                          child: Text('Login'),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -103,30 +131,28 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> loginUser() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-
-    try {
-      context.read<AuthBloc>().add(AuthEventLogIn(email, password));
-      // await AuthServices.firebase().logIn(email: email, password: password);
-      // final user = AuthServices.firebase().currentUser;
-
-      // if (user?.isEmailVerified ?? false) {
-      //   Navigator.of(
-      //     context,
-      //   ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
-      // } else {
-      //   Navigator.of(
-      //     context,
-      //   ).pushNamedAndRemoveUntil(emailVerificationRoute, (route) => false);
-      // }
-    } on InvalidCredentialException {
-      await showErrorDialog(context, 'Invalid Credentials');
-    } on UserNotFountException {
-      await showErrorDialog(context, 'User not found');
-    } on WrongPasswordAuthException {
-      await showErrorDialog(context, 'Wrong Password');
-    } on GenericAuthException {
-      await showErrorDialog(context, 'Authentication Error');
-    }
+    context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+    // try {
+    // await AuthServices.firebase().logIn(email: email, password: password);
+    // final user = AuthServices.firebase().currentUser;
+    // if (user?.isEmailVerified ?? false) {
+    //   Navigator.of(
+    //     context,
+    //   ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+    // } else {
+    //   Navigator.of(
+    //     context,
+    //   ).pushNamedAndRemoveUntil(emailVerificationRoute, (route) => false);
+    // }
+    // } on InvalidCredentialException {
+    //   await showErrorDialog(context, 'Invalid Credentials');
+    // } on UserNotFountException {
+    //   await showErrorDialog(context, 'User not found');
+    // } on WrongPasswordAuthException {
+    //   await showErrorDialog(context, 'Wrong Password');
+    // } on GenericAuthException {
+    //   await showErrorDialog(context, 'Authentication Error');
+    // }
   }
 
   // Future<void> _initializeWithDelay() async {
