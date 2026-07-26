@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -102,20 +105,19 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     try {
-      await AuthServices.firebase().logIn(email: email, password: password);
-      final user = AuthServices.firebase().currentUser;
-      
-      if (user?.isEmailVerified ?? false) {
-        Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
-      } else {
-        Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil(emailVerificationRoute, (route) => false);
-      }
+      context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+      // await AuthServices.firebase().logIn(email: email, password: password);
+      // final user = AuthServices.firebase().currentUser;
 
-      // print('User Credentials: $userCredential');
+      // if (user?.isEmailVerified ?? false) {
+      //   Navigator.of(
+      //     context,
+      //   ).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+      // } else {
+      //   Navigator.of(
+      //     context,
+      //   ).pushNamedAndRemoveUntil(emailVerificationRoute, (route) => false);
+      // }
     } on InvalidCredentialException {
       await showErrorDialog(context, 'Invalid Credentials');
     } on UserNotFountException {
