@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 
 class EmailVerification extends StatefulWidget {
   const EmailVerification({super.key});
@@ -14,7 +16,7 @@ class _EmailVerificationState extends State<EmailVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Email verification screen')),
+      appBar: AppBar(title: Text('EMAIL VERIFICATION')),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,9 +27,12 @@ class _EmailVerificationState extends State<EmailVerification> {
             Text("Didn't receive the mail press the button bellow"),
             TextButton(
               onPressed: () async {
-                await AuthServices.firebase().sendEmailVerification();
-                // final user = FirebaseAuth.instance.currentUser;
-                // await user?.sendEmailVerification();  senEmailVerification is not user level anymore
+                context.read<AuthBloc>().add(
+                  const AuthEventSendEmailVerification(),
+                );
+                // await AuthServices.firebase().sendEmailVerification();
+                // // final user = FirebaseAuth.instance.currentUser;
+                // // await user?.sendEmailVerification();  senEmailVerification is not user level anymore
               },
               child: Text('Send verification link'),
             ),
@@ -39,10 +44,9 @@ class _EmailVerificationState extends State<EmailVerification> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await AuthServices.firebase().logOut();
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(registerRoute, (route) => false);
+                context.read<AuthBloc>().add(
+                  const AuthEventLogOut(),
+                );
               },
               child: Text('Logout and Restart'),
             ),

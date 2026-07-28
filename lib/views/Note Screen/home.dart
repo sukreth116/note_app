@@ -5,6 +5,7 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_ev
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/login.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AuthBloc>().add(const AuthEventInitialize());
-    return BlocBuilder<AuthBloc,AuthState>(
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthStatLoggedIn) {
           return const MyNotes();
@@ -21,6 +22,8 @@ class HomePage extends StatelessWidget {
           return const EmailVerification();
         } else if (state is AuthStateLoggedOut) {
           return const LoginScreen();
+        } else if (state is AuthStateRegistering) {
+          return const RegisterScreen();
         } else {
           return Scaffold(body: CircularProgressIndicator());
         }
