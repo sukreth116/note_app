@@ -4,8 +4,12 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/auth_user.da
 
 @immutable
 abstract class AuthState {
-   
-  const AuthState();
+  final bool isLoading;
+  final String? loadingText;
+  const AuthState({
+    required this.isLoading,
+    this.loadingText = 'Please wait a moment',
+  });
 }
 
 // class AuthStateLoading extends AuthState {
@@ -13,32 +17,31 @@ abstract class AuthState {
 // }
 
 class AuthStateUninitialized extends AuthState {
-  const AuthStateUninitialized();
+  const AuthStateUninitialized({required super.isLoading});
 }
 
 class AuthStateRegistering extends AuthState {
   final Exception exception;
-  const AuthStateRegistering(this.exception);
+  const AuthStateRegistering({required this.exception, required super.isLoading});
 }
 
 class AuthStatLoggedIn extends AuthState {
   final AuthUser user;
-  const AuthStatLoggedIn(this.user);
+  const AuthStatLoggedIn({required this.user, required super.isLoading});
 }
 
 class AuthStateNeedsVerification extends AuthState {
-  const AuthStateNeedsVerification();
+  const AuthStateNeedsVerification({required super.isLoading});
 }
 
 class AuthStateLoggedOut extends AuthState with EquatableMixin {
   final Exception? exception;
-  final bool isLoading;
-  const AuthStateLoggedOut({required this.exception, required this.isLoading});
+  const AuthStateLoggedOut({required this.exception, required super.isLoading, super.loadingText});
 
   @override
   List<Object?> get props => [exception, isLoading];
 }
- 
+
 // class AuthStateLogoutFailure extends AuthState {
 //   final Exception exception;
 //   const AuthStateLogoutFailure(this.exception);

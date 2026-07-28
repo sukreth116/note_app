@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 typedef CloseDialog = void Function();
 
 CloseDialog showLoadingDialog({
-  required BuildContext context,
+  required BuildContext context, 
   required String text,
 }) {
   final dialog = AlertDialog(
@@ -23,3 +23,4 @@ CloseDialog showLoadingDialog({
   );
   return () => Navigator.of(context).pop();
 }
+  

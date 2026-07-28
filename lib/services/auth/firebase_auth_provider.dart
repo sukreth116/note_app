@@ -3,7 +3,7 @@ import 'package:flutter_tutorial_first_sample_project/utilities/firebase_options
 import 'auth_exceptions.dart';
 import 'auth_user.dart';
 import 'auth_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' 
+import 'package:firebase_auth/firebase_auth.dart'
     show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
@@ -61,6 +61,7 @@ class FirebaseAuthProvider implements AuthProvider {
     required String password,
   }) async {
     try {
+      // await Future.delayed(Duration(seconds: 3));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
