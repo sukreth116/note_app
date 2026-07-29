@@ -84,8 +84,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: () async {
-                            await registerUser();
+                          onPressed: () {
+                            // await registerUser();
+                            context.read<AuthBloc>().add(
+                              AuthEventRegister(_emailController.text, _passwordController.text),
+                            );
                           },
                           child: Text('Register'),
                         ),

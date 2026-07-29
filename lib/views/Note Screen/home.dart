@@ -5,6 +5,7 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bl
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/email_verification.dart';
+import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/forgot_password_screen.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/login.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
@@ -33,6 +34,8 @@ class HomePage extends StatelessWidget {
           return const EmailVerification();
         } else if (state is AuthStateLoggedOut) {
           return const LoginScreen();
+        } else if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordScreen();
         } else if (state is AuthStateRegistering) {
           return const RegisterScreen();
         } else {

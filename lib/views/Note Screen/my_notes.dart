@@ -12,7 +12,7 @@ import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/note_l
 class MyNotes extends StatefulWidget {
   const MyNotes({super.key});
 
-  @override 
+  @override
   State<MyNotes> createState() => _MyNotesState();
 }
 
@@ -28,7 +28,7 @@ class _MyNotesState extends State<MyNotes> {
   }
 
   // This is the starting point when we create an instance factory contructor
-  // NotesServices and NotesServices._sharedInstance trigger                 
+  // NotesServices and NotesServices._sharedInstance trigger
 
   @override
   Widget build(BuildContext context) {
@@ -70,35 +70,37 @@ class _MyNotesState extends State<MyNotes> {
         ],
       ),
       body: StreamBuilder(
-                stream: _notesServices.allNotes(ownerUserId: userId),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.active:
-                      if (snapshot.hasData) {
-                        final allNotes = snapshot.data as Iterable<CloudNote>;
-                        return NoteListView(
-                          // in here we are calling NoteListView. So the arguments are passed. as like the onTap parameter expect a function.
-                          onTapFunction: (CloudNote note) {
-                            // so we pass a anonymous function definition in that anonymous function parameter is DatabaseNote note
-                            Navigator.of(
-                              // so like onTap we pass onDelete
-                              context,
-                            ).pushNamed(createOrUpdateRoute, arguments: note);
-                          },
-                          notesList: allNotes,
-                          onDeleteNote: (note) async {
-                            await _notesServices.deleteNote(documentId: note.documentId);
-                          },
-                        );
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    default:
-                      return const CircularProgressIndicator();
-                  }
-                },
-              )
+        stream: _notesServices.allNotes(ownerUserId: userId),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              if (snapshot.hasData) {
+                final allNotes = snapshot.data as Iterable<CloudNote>;
+                return NoteListView(
+                  // in here we are calling NoteListView. So the arguments are passed. as like the onTap parameter expect a function.
+                  onTapFunction: (CloudNote note) {
+                    // so we pass a anonymous function definition in that anonymous function parameter is DatabaseNote note
+                    Navigator.of(
+                      // so like onTap we pass onDelete
+                      context,
+                    ).pushNamed(createOrUpdateRoute, arguments: note);
+                  },
+                  notesList: allNotes,
+                  onDeleteNote: (note) async {
+                    await _notesServices.deleteNote(
+                      documentId: note.documentId,
+                    );
+                  },
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bl
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
-import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/loading_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is AuthStateLoggedOut) {
           
           if (state.exception is UserNotFountException) {
-            await showErrorDialog(context, 'User not found');
+            await showErrorDialog(context, 'Cannot find a user with the entered credentials!');
           } else if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(context, 'Wrong user credentials');
           } else if (state.exception is GenericAuthException) {
@@ -100,7 +99,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextButton(
                           onPressed: () {
                             context.read<AuthBloc>().add(
-                              const AuthEventShouldRegister(),
+                              AuthEventForgotPassword(null),
+                            );
+                          },
+                          child: Text('Forgot Password!'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(
+                              AuthEventShouldRegister(),
                             );
                           },
                           child: Text('Not have an account? Register here'),

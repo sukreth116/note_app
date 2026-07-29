@@ -6,22 +6,70 @@ import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_st
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(AuthProvider provider)
     : super(const AuthStateUninitialized(isLoading: true)) {
+    // forgot password
+    on<AuthEventForgotPassword>((event, emit) async {
+      emit(
+        const AuthStateForgotPassword(
+          isLoading: true,
+          exception: null,
+          hasSentEmail: false,
+        ),
+      );
+      final email = event.email;
+      if (email == null) {
+        return;
+      }
+      emit(
+        const AuthStateForgotPassword(
+          isLoading: true,
+          exception: null,
+          hasSentEmail: true,
+        ),
+      );
+      bool didSendEmail;
+      Exception? exception;
+      try {
+        await provider.sendResetPassword(toEmail: email);
+        didSendEmail = true;
+        exception = null;
+      } on Exception catch (e) {
+        didSendEmail = false;
+        exception = e;
+      }
+      emit(
+        AuthStateForgotPassword(
+          isLoading: false,
+          exception: exception,
+          hasSentEmail: didSendEmail,
+        ),
+      );
+    });
+
     //send email verification
     on<AuthEventSendEmailVerification>((event, emit) async {
       await provider.sendEmailVerification();
       emit(state);
     });
+
+    // event to go register page
+    on<AuthEventShouldRegister>((event, emit) {
+      emit(const AuthStateRegistering(exception: null, isLoading: false));
+    });
+
+    // event that after press register button
     on<AuthEventRegister>((event, emit) async {
       final email = event.email;
       final password = event.password;
       try {
+        emit(const AuthStateRegistering(exception: null, isLoading: true));
         await provider.createUser(email: email, password: password);
         await provider.sendEmailVerification();
         emit(const AuthStateNeedsVerification(isLoading: false));
       } on Exception catch (e) {
-        emit(AuthStateRegistering(exception: e,isLoading: false));
+        emit(AuthStateRegistering(exception: e, isLoading: false));
       }
     });
+
     // initialize event
     on<AuthEventInitialize>((event, emit) async {
       await provider.initialize();
@@ -56,7 +104,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         } else {
           emit(const AuthStateLoggedOut(exception: null, isLoading: false));
         }
-        emit(AuthStatLoggedIn(user:user,isLoading: false));
+        emit(AuthStatLoggedIn(user: user, isLoading: false));
       } on Exception catch (e) {
         emit(AuthStateLoggedOut(exception: e, isLoading: false));
       }
