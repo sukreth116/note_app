@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,14 +14,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // late final TextEditingController _nameController;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
-  // CloseDialog? _closeDialogHandle;
 
   @override
   void initState() {
-    // _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
@@ -33,19 +29,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          
           if (state.exception is UserNotFountException) {
-            await showErrorDialog(context, 'Cannot find a user with the entered credentials!');
+            await showErrorDialog(
+              context,
+              'Cannot find a user with the entered credentials!',
+            );
           } else if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(context, 'Wrong user credentials');
           } else if (state.exception is GenericAuthException) {
             await showErrorDialog(context, 'Authentication Error');
           } else if (state.exception is InvalidEmailException) {
             await showErrorDialog(context, 'Invalid Email');
-          } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Unable Login');
           } else if (state.exception is InvalidCredentialException) {
-            await showErrorDialog(context, 'Invali Credentials');
+            await showErrorDialog(
+              context,
+              'There is no account exist in this email address you entered',
+            );
           }
         }
       },
@@ -53,83 +52,83 @@ class _LoginScreenState extends State<LoginScreen> {
         appBar: AppBar(
           title: Text('LOG IN', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
-        body: SafeArea(
-          child: FutureBuilder(
-            // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
-            future: AuthServices.firebase().initialize(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Text(
-                          'WELCOME TO MY APP',
-                          style: TextStyle(
-                            color: Colors.teal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 23,
-                          ),
-                        ),
-                        TextField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(hintText: 'Enter email'),
-                        ),
-                        TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          autocorrect: false,
-                          enableSuggestions: false,
-                          decoration: InputDecoration(
-                            hintText: 'Enter password',
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            final email = _emailController.text;
-                            final password = _passwordController.text;
-                            context.read<AuthBloc>().add(
-                              AuthEventLogIn(email, password),
-                            );
-                          },
-                          child: Text('Login'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context.read<AuthBloc>().add(
-                              AuthEventForgotPassword(null),
-                            );
-                          },
-                          child: Text('Forgot Password!'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context.read<AuthBloc>().add(
-                              AuthEventShouldRegister(),
-                            );
-                          },
-                          child: Text('Not have an account? Register here'),
-                        ),
-                      ],
-                    ),
-                  );
-                default:
-                  return Center(
-                    child: Text(
-                      'Loading...',
+        body:
+            // FutureBuilder(
+            //   // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
+            //   future: AuthServices.firebase().initialize(),
+            //   builder: (context, snapshot) {
+            //     switch (snapshot.connectionState) {
+            //       case ConnectionState.done:
+            // return
+            // no need to firebase initialization anymore because after implemented bloc we initialize in home page
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      'WELCOME TO MY APP',
                       style: TextStyle(
-                        color: Colors.lightBlue,
-                        fontSize: 23,
+                        color: Colors.teal,
                         fontWeight: FontWeight.bold,
+                        fontSize: 23,
                       ),
                     ),
-                  );
-              }
-            },
-          ),
-        ),
+                    TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(hintText: 'Enter email'),
+                    ),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      decoration: InputDecoration(hintText: 'Enter password'),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        final email = _emailController.text;
+                        final password = _passwordController.text;
+                        context.read<AuthBloc>().add(
+                          AuthEventLogIn(email, password),
+                        );
+                      },
+                      child: Text('Login'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(
+                          AuthEventForgotPassword(null),
+                        );
+                      },
+                      child: Text('Forgot Password!'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthEventShouldRegister());
+                      },
+                      child: Text('Not have an account? Register here'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        //       default:
+        //         return Center(
+        //           child: Text(
+        //             'Loading...',
+        //             style: TextStyle(
+        //               color: Colors.lightBlue,
+        //               fontSize: 23,
+        //               fontWeight: FontWeight.bold,
+        //             ),
+        //           ),
+        //         );
+        //     }
+        //   },
+        // ),
       ),
     );
   }
@@ -170,11 +169,10 @@ class _LoginScreenState extends State<LoginScreen> {
   //   print('print user if, active before login screen $user');
   // }
 
-  // Now don't need this because initialize function defined in authservice
+  // Now don't need this because initialize function moved to firebase authservice
 
   @override
   void dispose() {
-    // _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

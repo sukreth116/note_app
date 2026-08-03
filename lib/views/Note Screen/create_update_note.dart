@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/generics/get_arguments.dart';
-import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/firebase_cloud_storage.dart';
-import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_storage_firebase_crud.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note_model.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNote extends StatefulWidget {
@@ -50,7 +50,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
     _textController.removeListener(_textControllerListener);
     _textController.addListener(_textControllerListener);
   }
-
+  
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
     final widgetNote = context.getArgument<CloudNote>();
     if (widgetNote != null) {
@@ -134,12 +134,15 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               _setupTextControllerListener();
-              return TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your notes',
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: _textController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    hintText: 'Start typing your notes',
+                  ),
                 ),
               );
             default:

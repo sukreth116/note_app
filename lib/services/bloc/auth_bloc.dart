@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_provider.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(AuthProvider provider)
@@ -10,7 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventForgotPassword>((event, emit) async {
       emit(
         const AuthStateForgotPassword(
-          isLoading: true,
+          isLoading: false,
           exception: null,
           hasSentEmail: false,
         ),
@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         const AuthStateForgotPassword(
           isLoading: true,
           exception: null,
-          hasSentEmail: true,
+          hasSentEmail: false,
         ),
       );
       bool didSendEmail;
@@ -43,6 +43,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           hasSentEmail: didSendEmail,
         ),
       );
+      emit(AuthStateLoggedOut(exception: null, isLoading: false));
     });
 
     //send email verification
@@ -93,7 +94,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           loadingText: 'Please wait while I log you in',
         ),
       );
-      await Future.delayed(Duration(seconds: 3));
       final email = event.email;
       final password = event.password;
       try {
@@ -110,7 +110,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    // log out
     on<AuthEventLogOut>((event, emit) async {
       try {
         await provider.logOut();
@@ -118,6 +117,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } on Exception catch (e) {
         emit(AuthStateLoggedOut(exception: e, isLoading: false));
       }
+    });
+
+    on<AuthEventShouldLogIn>((event, emit) async {
+      emit(
+        const AuthStateLoggedOut(
+          exception: null,
+          isLoading: true,
+          loadingText: 'Opening login...',
+        ),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      emit(const AuthStateLoggedOut(exception: null, isLoading: false));
     });
   }
 }

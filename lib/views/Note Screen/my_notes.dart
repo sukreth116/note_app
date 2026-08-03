@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note.dart';
-import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/firebase_cloud_storage.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note_model.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_storage_firebase_crud.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
@@ -70,7 +70,7 @@ class _MyNotesState extends State<MyNotes> {
         ],
       ),
       body: StreamBuilder(
-        stream: _notesServices.allNotes(ownerUserId: userId),
+        stream: _notesServices.getAllNotes(ownerUserId: userId),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:

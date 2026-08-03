@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/firebase_auth_provider.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/email_verification.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/home.dart';
@@ -30,10 +30,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // primaryColor: const Color(0xFFFF0000), // your design background color
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.purple,
           foregroundColor: Colors.white,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.purple, 
+            foregroundColor: Colors.white,
+          ),
         ),
       ),
       home: BlocProvider<AuthBloc>(

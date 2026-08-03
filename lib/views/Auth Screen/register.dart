@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_bloc.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_event.dart';
-import 'package:flutter_tutorial_first_sample_project/services/auth/bloc/auth_state.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
+import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_state.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/error_dialog.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -50,15 +50,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        body: SafeArea(
-          child: FutureBuilder(
-            // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
-            future: AuthServices.firebase().initialize(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
+        body: FutureBuilder(
+          // if not wrtten this got an exception => FirebaseException ([core/no-app] No Firebase App '[DEFAULT]' has been created - call Firebase.initializeApp())
+          future: AuthServices.firebase().initialize(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Text(
@@ -83,11 +83,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hintText: 'enter password',
                           ),
                         ),
+                        SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             // await registerUser();
                             context.read<AuthBloc>().add(
-                              AuthEventRegister(_emailController.text, _passwordController.text),
+                              AuthEventRegister(
+                                _emailController.text,
+                                _passwordController.text,
+                              ),
                             );
                           },
                           child: Text('Register'),
@@ -95,28 +99,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         TextButton(
                           onPressed: () {
                             context.read<AuthBloc>().add(
-                              const AuthEventLogOut(),
+                              const AuthEventShouldLogIn(),
                             );
                           },
                           child: Text('Already have an account? Login'),
                         ),
                       ],
                     ),
-                  );
-                default:
-                  return Center(
-                    child: Text(
-                      'Loading...',
-                      style: TextStyle(
-                        color: Colors.lightBlue,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                );
+              default:
+                return Center(
+                  child: Text(
+                    'Loading...',
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-              }
-            },
-          ),
+                  ),
+                );
+            }
+          },
         ),
       ),
     );

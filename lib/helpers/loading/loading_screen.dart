@@ -13,7 +13,7 @@ class LoadingScreen {
     if (controller?.updateLoading(text) ?? false) {
       return;
     } else {
-      controller = showOverlay(context: context, text: text); 
+      controller = showOverlay(context: context, text: text);
     }
   }
 
@@ -29,6 +29,7 @@ class LoadingScreen {
     final _text = StreamController<String>();
     _text.add(text);
     final state = Overlay.of(context);
+    
     final renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
     final overlay = OverlayEntry(

@@ -10,7 +10,7 @@ abstract class AuthState {
     required this.isLoading,
     this.loadingText = 'Please wait a moment',
   });
-}
+} 
 
 // class AuthStateLoading extends AuthState {
 //   const AuthStateLoading();
@@ -45,7 +45,7 @@ class AuthStateNeedsVerification extends AuthState {
   const AuthStateNeedsVerification({required super.isLoading});
 }
 
-class AuthStateLoggedOut extends AuthState with EquatableMixin {
+class AuthStateLoggedOut extends AuthState with Equatable {
   final Exception? exception;
   const AuthStateLoggedOut({
     required this.exception,

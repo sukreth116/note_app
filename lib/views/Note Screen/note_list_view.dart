@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note.dart';
+import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note_model.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/delete_dailog.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
@@ -36,7 +36,9 @@ class NoteListView extends StatelessWidget {
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
               ),
-              subtitle: Text('${note.userId} ${note.documentId}'),
+              subtitle: Text(
+                'user id: ${note.userId} doc id: ${note.documentId}',
+              ),
               trailing: IconButton(
                 onPressed: () async {
                   final shouldDelete = await showDeleteDialog(context);

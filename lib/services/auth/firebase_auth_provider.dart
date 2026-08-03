@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart'
 class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<void> initialize() async {
+    // await Future.delayed(Duration(seconds: 3));
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
