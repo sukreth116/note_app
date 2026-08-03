@@ -53,7 +53,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     // event to go register page
-    on<AuthEventShouldRegister>((event, emit) {
+    on<AuthEventShouldRegister>((event, emit) async {
+      emit(const AuthStateRegistering(exception: null, isLoading: true));
+      await Future.delayed(Duration(milliseconds: 500));
       emit(const AuthStateRegistering(exception: null, isLoading: false));
     });
 

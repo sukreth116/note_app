@@ -54,37 +54,5 @@ class _HomePageState extends State<HomePage> {
         }
       },
     );
-    // return FutureBuilder(
-    //   future: AuthServices.firebase().initialize(),
-    //   builder: (context, snapshot) {
-    //     switch (snapshot.connectionState) {
-    //       case ConnectionState.done:
-    //         // final user = AuthServices.firebase().currentUser;
-    //         final user = AuthServices.firebase().currentUser;
-    //         print('now have a user that is $user');
-    //         if (user != null) {
-    //           print(user);
-    //           if (user.isEmailVerified) {
-    //             return MyNotes();
-    //             // print('email verified');
-    //           } else {
-    //             return EmailVerification();
-    //             // Navigator.of(context).push(
-    //             //   MaterialPageRoute(
-    //             //     builder: (ctx) {
-    //             //       return EmailVerification();
-    //             //     },
-    //             //   ),
-    //             // );
-    //           }
-    //         } else {
-    //           return LoginScreen();
-    //         }
-    //       // return Text('Done home reached');
-    //       default:
-    //         return Text('Loading please wait');
-    //     }
-    //   },
-    // );
   }
 }
