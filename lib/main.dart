@@ -10,6 +10,7 @@ import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
+import 'package:flutter_tutorial_first_sample_project/l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +28,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.purple, 
+            backgroundColor: Colors.purple,
             foregroundColor: Colors.white,
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
@@ -32,50 +33,53 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state.exception is UserNotFountException) {
             await showErrorDialog(
               context,
-              'Cannot find a user with the entered credentials!',
+              context.loc.login_error_cannot_find_user,
             );
           } else if (state.exception is WrongPasswordAuthException) {
-            await showErrorDialog(context, 'Wrong user credentials');
+            await showErrorDialog(
+              context,
+              context.loc.login_error_wrong_credentials,
+            );
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Authentication Error');
+            await showErrorDialog(context, context.loc.login_error_auth_error);
           } else if (state.exception is InvalidEmailException) {
-            await showErrorDialog(context, 'Invalid Email');
+            await showErrorDialog(
+              context,
+              context.loc.login_error_invalid_email,
+            );
           } else if (state.exception is InvalidCredentialException) {
             await showErrorDialog(
               context,
-              'There is no account exist in this email address you entered',
+              context.loc.login_error_invalid_credentials,
             );
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('LOG IN', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(
+            context.loc.login,
+            // AppLocalizations.of(context)!.localeName,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Text(
-                  'WELCOME TO MY APP',
-                  style: TextStyle(
-                    color: Colors.teal,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 23,
-                  ),
-                ),
+                Text(context.loc.login_view_prompt),
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(hintText: 'Enter email'),
+                  decoration: InputDecoration(hintText: context.loc.email_text_field_placeholder),
                 ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
                   autocorrect: false,
                   enableSuggestions: false,
-                  decoration: InputDecoration(hintText: 'Enter password'),
+                  decoration: InputDecoration(hintText: context.loc.password_text_field_placeholder),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -86,19 +90,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       AuthEventLogIn(email, password),
                     );
                   },
-                  child: Text('Login'),
+                  child: Text(context.loc.login),
                 ),
                 TextButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(AuthEventForgotPassword(null));
                   },
-                  child: Text('Forgot Password!'),
+                  child: Text(context.loc.login_view_forgot_password),
                 ),
                 TextButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(AuthEventShouldRegister());
                   },
-                  child: Text('Not have an account? Register here'),
+                  child: Text(context.loc.login_view_not_registered_yet),
                 ),
               ],
             ),

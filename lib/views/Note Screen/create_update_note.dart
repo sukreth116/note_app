@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/generics/get_arguments.dart';
 import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_storage_firebase_crud.dart';
 import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note_model.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart'; 
 
 class CreateUpdateNote extends StatefulWidget {
   const CreateUpdateNote({super.key});
@@ -113,7 +114,7 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Note'),
+        title: Text(context.loc.note),
         actions: [
           IconButton(
             onPressed: () async {
@@ -140,8 +141,8 @@ class _CreateUpdateNoteState extends State<CreateUpdateNote> {
                   controller: _textController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  decoration: const InputDecoration(
-                    hintText: 'Start typing your notes',
+                  decoration:  InputDecoration(
+                    hintText: context.loc.start_typing_your_note,
                   ),
                 ),
               );

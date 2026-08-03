@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_exceptions.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
@@ -30,20 +31,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
           if (state.exception is WeakPasswordAuthException) {
-            await showErrorDialog(context, 'Weak Password');
+            await showErrorDialog(context, context.loc.register_error_weak_password);
           } else if (state.exception is EmailAlreadyInUseException) {
-            await showErrorDialog(context, 'Email is already in use');
+            await showErrorDialog(context, context.loc.register_error_email_already_in_use);
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Failed to register');
+            await showErrorDialog(context, context.loc.register_error_generic);
           } else if (state.exception is InvalidEmailException) {
-            await showErrorDialog(context, 'Invalid Email');
+            await showErrorDialog(context, context.loc.register_error_invalid_email);
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'REGISTER',
+            context.loc.register,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -53,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               children: [
                 Text(
-                  'WELCOME TO MY APP',
+                  context.loc.register_view_prompt,
                   style: TextStyle(
                     color: Colors.teal,
                     fontWeight: FontWeight.bold,
@@ -63,14 +64,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(hintText: 'enter email'),
+                  decoration: InputDecoration(hintText:context.loc.email_text_field_placeholder),
                 ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
                   autocorrect: false,
                   enableSuggestions: false,
-                  decoration: InputDecoration(hintText: 'enter password'),
+                  decoration: InputDecoration(hintText: context.loc.password_text_field_placeholder),
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -82,13 +83,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   },
-                  child: Text('Register'),
+                  child: Text(context.loc.register),
                 ),
                 TextButton(
                   onPressed: () {
                     context.read<AuthBloc>().add(const AuthEventShouldLogIn());
                   },
-                  child: Text('Already have an account? Login'),
+                  child: Text(context.loc.register_view_already_registered),
                 ),
               ],
             ),

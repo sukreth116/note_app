@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/constants/routes.dart';
 import 'package:flutter_tutorial_first_sample_project/enums/menu_action.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/auth/auth_services.dart';
 import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_note_model.dart';
 import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_storage_firebase_crud.dart';
@@ -8,6 +9,10 @@ import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_d
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
 import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/note_list_view.dart';
+
+extension Count<T extends Iterable> on Stream<T> {
+  Stream<int> get getLength => map((event) => event.length);
+}
 
 class MyNotes extends StatefulWidget {
   const MyNotes({super.key});
@@ -34,7 +39,18 @@ class _MyNotesState extends State<MyNotes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MY NOTES VIEW'),
+        title: StreamBuilder(
+          stream: _notesServices.getAllNotes(ownerUserId: userId).getLength,
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.hasData) {
+              final noteCount = asyncSnapshot.data ?? 0;
+              final text = context.loc.notes_title(noteCount);
+              return Text(text);
+            } else {
+              return const Text('');
+            }
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -62,7 +78,7 @@ class _MyNotesState extends State<MyNotes> {
               return [
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('Logout'),
+                  child: Text(context.loc.logout_button),
                 ),
               ];
             },

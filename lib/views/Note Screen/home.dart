@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
   
-  @override
+  @override 
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) async {
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         if (state is AuthStatLoggedIn) {
           return const MyNotes();
         } else if (state is AuthStateNeedsVerification) {
-          return const EmailVerification();
+          return const EmailVerification(); 
         } else if (state is AuthStateLoggedOut) {
           return const LoginScreen();
         } else if (state is AuthStateForgotPassword) {

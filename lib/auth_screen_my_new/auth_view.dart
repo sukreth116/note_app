@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/login_form.dart';
 import 'package:flutter_tutorial_first_sample_project/auth_screen_my_new/register_view.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -28,8 +29,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   labelColor: Colors.orange.shade800,
                   unselectedLabelColor: Colors.orange.shade200,
                   indicatorColor: Colors.orange.shade800,
-                  tabs: const [
-                    Tab(text: "Login"),
+                  tabs: [
+                    Tab(text: context.loc.ok),
                     Tab(text: "Register"),
                   ],
                 ),

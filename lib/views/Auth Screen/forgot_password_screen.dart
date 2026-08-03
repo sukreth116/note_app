@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tutorial_first_sample_project/extensions/buildcontext/loc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_state.dart';
@@ -26,7 +27,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           if (state.exception != null) {
             await showErrorDialog(
               context,
-              'We could not complete your request. Please make sure you are registered user. you can as a new user',
+              context.loc.forgot_password_view_generic_error,
             );
           } else if (state.hasSentEmail) {
             _textController.clear();
@@ -36,13 +37,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Reset Password')),
+        appBar: AppBar(title: Text(context.loc.forgot_password)),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Text(
-                'If you forgot your password, simply enter your email and enter the submit button',
+                context.loc.forgot_password_view_prompt,
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -50,7 +51,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 autofocus: true,
                 controller: _textController,
                 decoration: InputDecoration(
-                  hintText: 'Enter your email here...',
+                  hintText: context.loc.email_text_field_placeholder,
                 ),
               ),
               SizedBox(height: 20),
@@ -59,14 +60,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   final email = _textController.text;
                   context.read<AuthBloc>().add(AuthEventForgotPassword(email));
                 },
-                child: Text('Send link'),
+                child: Text(context.loc.forgot_password_view_send_me_link),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(AuthEventLogOut());
                 },
-                child: Text('Back to Login'),
+                child: Text(context.loc.forgot_password_view_back_to_login),
               ),
             ],
           ),
