@@ -4,11 +4,11 @@ import 'package:flutter_tutorial_first_sample_project/helpers/loading/loading_sc
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_bloc.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_event.dart';
 import 'package:flutter_tutorial_first_sample_project/services/bloc/auth_state.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/email_verification.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/forgot_password_screen.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/login.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Auth%20Screen/register.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/my_notes.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Auth%20Screen/email_verification.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Auth%20Screen/forgot_password_screen.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Auth%20Screen/login.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Auth%20Screen/register.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Note%20Screen/my_notes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

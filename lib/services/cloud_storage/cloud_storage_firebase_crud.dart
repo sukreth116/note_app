@@ -5,7 +5,6 @@ import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/clo
 
 class FirebaseCloudStorage {
   final notes = FirebaseFirestore.instance.collection('notes');
-
   Future<void> deleteNote({required String documentId}) async {
     try {
       await notes.doc(documentId).delete();
@@ -30,14 +29,13 @@ class FirebaseCloudStorage {
         .where(onwerUserIdField, isEqualTo: ownerUserId)
         .snapshots()
         .map(
-          (event) => event.docs
-              .map((doc) => CloudNote.fromSnapshot(doc))
-              // .where((note) => note.userId == ownerUserId),
+          (event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)),
+          // .where((note) => note.userId == ownerUserId),
         );
     return allNotes;
   }
 
-  // commanding this because never used current
+  // commenting this because currently not using
   // Future<Iterable<CloudNote>> getNote({required String ownerUserId}) async {
   //   try {
   //     return await notes
@@ -69,7 +67,7 @@ class FirebaseCloudStorage {
   static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();
 
-  FirebaseCloudStorage._sharedInstance();
+  FirebaseCloudStorage._sharedInstance(); // is the constructor declaration, not a constructor call.
 
   factory FirebaseCloudStorage() => _shared;
 }

@@ -88,6 +88,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     // log in
+    // on<AuthEventLogIn>((event, emit) async {
+    //   emit(
+    //     const AuthStateLoggedOut(
+    //       exception: null,
+    //       isLoading: true,
+    //       loadingText: 'Please wait while I log you in',
+    //     ),
+    //   );
+    //   final email = event.email;
+    //   final password = event.password;
+    //   try {
+    //     final user = await provider.logIn(email: email, password: password);
+    //     if (!user.isEmailVerified) {
+    //       emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+    //       emit(const AuthStateNeedsVerification(isLoading: false));
+    //     } else {
+    //       emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+    //     }
+    //     emit(AuthStatLoggedIn(user: user, isLoading: false));
+    //   } on Exception catch (e) {
+    //     emit(AuthStateLoggedOut(exception: e, isLoading: false));
+    //   }
+    // });
+
     on<AuthEventLogIn>((event, emit) async {
       emit(
         const AuthStateLoggedOut(
@@ -96,17 +120,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           loadingText: 'Please wait while I log you in',
         ),
       );
-      final email = event.email;
-      final password = event.password;
+
       try {
-        final user = await provider.logIn(email: email, password: password);
+        final user = await provider.logIn(
+          email: event.email,
+          password: event.password,
+        );
+
         if (!user.isEmailVerified) {
-          emit(const AuthStateLoggedOut(exception: null, isLoading: false));
           emit(const AuthStateNeedsVerification(isLoading: false));
         } else {
-          emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+          emit(AuthStatLoggedIn(user: user, isLoading: false));
         }
-        emit(AuthStatLoggedIn(user: user, isLoading: false));
       } on Exception catch (e) {
         emit(AuthStateLoggedOut(exception: e, isLoading: false));
       }

@@ -7,8 +7,8 @@ import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/clo
 import 'package:flutter_tutorial_first_sample_project/services/cloud_storage/cloud_storage_firebase_crud.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter_tutorial_first_sample_project/utilities/screen_functions.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/create_update_note.dart';
-import 'package:flutter_tutorial_first_sample_project/views/Note%20Screen/note_list_view.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Note%20Screen/create_update_note.dart';
+import 'package:flutter_tutorial_first_sample_project/screens/Note%20Screen/note_list_view.dart';
 
 extension Count<T extends Iterable> on Stream<T> {
   Stream<int> get getLength => map((event) => event.length);
@@ -47,7 +47,7 @@ class _MyNotesState extends State<MyNotes> {
               final text = context.loc.notes_title(noteCount);
               return Text(text);
             } else {
-              return const Text('');
+              return const Text('No Notes');
             }
           },
         ),
@@ -87,12 +87,12 @@ class _MyNotesState extends State<MyNotes> {
       ),
       body: StreamBuilder(
         stream: _notesServices.getAllNotes(ownerUserId: userId),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
+        builder: (context, asyncSnapshot) {
+          switch (asyncSnapshot.connectionState) {
             case ConnectionState.waiting:
             case ConnectionState.active:
-              if (snapshot.hasData) {
-                final allNotes = snapshot.data as Iterable<CloudNote>;
+              if (asyncSnapshot.hasData) {
+                final allNotes = asyncSnapshot.data as Iterable<CloudNote>;
                 return NoteListView(
                   // in here we are calling NoteListView. So the arguments are passed. as like the onTap parameter expect a function.
                   onTapFunction: (CloudNote note) {
